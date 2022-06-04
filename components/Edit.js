@@ -1,6 +1,6 @@
 const template = document.createElement("template");
 template.innerHTML = `
-    <input id="edit-btn" type="number"></input>
+    <input id="edit-input" type="number"></input>
 `;
 
 class Edit extends HTMLElement {
@@ -8,6 +8,9 @@ class Edit extends HTMLElement {
     constructor() {
         super();
         this.value = this.hasAttribute("value") ? this.getAttribute("value") : 0;
+        this.compare = this.hasAttribute("compare");
+        this.secondValue = this.hasAttribute("compareWith") ? this.getAttribute("compareWith") : undefined;
+        this.relation = "Equal";
     }
 
     
@@ -15,18 +18,26 @@ class Edit extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-        const input = this.shadowRoot.getElementById("edit-btn");
+        const input = this.shadowRoot.getElementById("edit-input");
         input.setAttribute("value", this.value);
         input.addEventListener("change", e => this.changeValue.bind(Edit.prototype, e)());
+
+        // Set relationship respect the second value  
+        
     }
     
     changeValue(e) {
         this.attributeChangedCallback("value", this.value, e.target.value);
-        console.log(this.compareValues("2"));
+        if(this.compare && this.secondValue) {
+            
+            // Idk what in the actual hell I was thinking to do here
+            this.relation
+
+        }
     }
     
     static get observedAttributes() {
-        return ["value"];
+        return ["value", "compare", "compareWith"];
     }
     
     attributeChangedCallback(property, oldValue, newValue) {
@@ -36,7 +47,7 @@ class Edit extends HTMLElement {
 
     }
     
-    isEqual(value) {
+    areEqual(value) {
         return this.value === value;
     }
 
@@ -44,6 +55,16 @@ class Edit extends HTMLElement {
         const nums = [ this.value, value ];
         const [ num1, num2 ] = nums.map(num => parseInt(num))
         return num1 - num2;
+    }
+
+    // Function to make brief the changing relationship
+    // I upload this like this because I want to upload something :v
+    setRelation() {
+        if(this.compare && this.secondValue) {
+            
+            this.relation 
+
+        }
     }
 
 }
